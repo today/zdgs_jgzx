@@ -1,0 +1,27 @@
+{
+  "name": "CMDC_gross_profit",
+  "main": "index.html",
+  "description": "集供中心 报表分析",
+  "version": "0.1.0",
+  "keywords": [ "报表","分析","node-webkit" ],
+
+  "window": {
+  	"title": "集供中心 报表分析",
+  	"icon": "favicon.ico",
+    "toolbar": true,
+    "frame": true,
+    "fullscreen": false,
+    "position": "center",
+    "resizable": true,
+    "width": 1100,
+    "height": 800
+  },
+  "dependencies": {
+    "underscore": "~1.4.4",
+    "node-xlsx": "~0.6.0"
+  },
+  "webkit": {
+    "plugin": false
+  }
+}
+

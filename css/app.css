@@ -1,0 +1,123 @@
+/* app css stylesheet */
+
+body {
+  margin: 0;
+  padding: 0; 
+  font-family: Helvetica , "Microsoft YaHei" , sans-serif;
+  font-size: 16px;
+}
+
+.logo {
+    margin-left: 8%;
+	font-size: 1.6em;
+    color: #fff;
+}
+
+input {
+    font-size: 1em;
+    background: #FFEB3B;
+    border-radius: 2px;
+    padding: 8px 26px;
+    border: 0;
+}
+
+button {
+	font-size: 1em;
+    background: #FFEB3B;
+    border-radius: 2px;
+    padding: 8px 26px;
+    border: 0;
+}
+
+button:disabled {
+    font-size: 1em;
+    background: #BBBBBB;
+    border-radius: 2px;
+    padding: 8px 26px;
+    border: 0;
+}
+
+button:hover {
+    transition: .3s;
+    -moz-transition: .3s; /* Firefox 4 */
+    -webkit-transition: .3s; /* Safari for Chrome */
+    -o-transition: .3s; /* Opera */
+    box-shadow: 0px 2px 2px 0px RGBA(0, 0, 0, 0.22);
+}
+
+nav {
+    display: inline-block;
+    background: #009688;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.22);
+    width: 100%;
+}
+
+.now {
+    margin: 20px;
+}
+
+.main-frame {
+    width: 90%;
+    margin: 0 auto;
+}
+
+#msg_area{
+	float: left;
+	width: 30em;
+    margin: 5px 5px 5px 5px;
+    padding: 10px;
+    border-radius: 2px;
+    background-color:white;
+    box-shadow: 
+    0px 0px 2px 0px RGBA(0, 0, 0, 0.12),
+    0px 2px 2px 0px RGBA(0, 0, 0, 0.22);
+}
+
+#cmd_area{
+	float: left;
+    border-radius: 2px;
+    margin: 5px 5px 5px 5px;
+    padding: 10px;
+    background-color:white;
+    box-shadow: 
+    0px 0px 2px 0px RGBA(0, 0, 0, 0.12),
+    0px 2px 2px 0px RGBA(0, 0, 0, 0.24);
+}
+
+.err_area{
+    font-size: 1em;
+    color: white;
+    margin: 8px 5px;
+    padding: 8px;
+    background-color: #E04336;
+    box-shadow: 
+    0px 0px 2px 0px RGBA(0, 0, 0, 0.12),
+    0px 2px 2px 0px RGBA(0, 0, 0, 0.24);
+}
+
+.err_msg{
+	font-size: 0.8em;
+	color: white;
+    margin: 8px 5px;
+    padding: 8px;
+    background-color: #F44336;
+    box-shadow: 
+    0px 0px 2px 0px RGBA(0, 0, 0, 0.12),
+    0px 2px 2px 0px RGBA(0, 0, 0, 0.24);
+}
+
+#debug_area{
+	font-size: 1em;
+    width: 40em;
+    margin: 2px 2px 2px 2px;
+    padding: 2px;
+    border: 1px solid silver;
+    background-color:white;
+    box-shadow: 0px 0px 2px #000;
+    
+    right:0px;
+    bottom:0px;
+    position:fixed;
+}
+
+

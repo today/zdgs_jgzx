@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title> 集供中心 报表分析助手 </title>
+  
+  <link rel="stylesheet" href="css/app.css">
+  <style type="text/css"></style>
+  
+  <script type="text/javascript" src="js/vue.js"></script>
+  <script type="text/javascript" src="js/lib.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+
+</head>
+<body id="app">
+    <nav class="head">
+        <ul><p class="logo"><img src="img/logo_s_3.png"> 集供中心 报表分析助手</p></ul>
+    </nav>
+  <div class="now"></div>
+  <div class="main-frame">
+   
+    
+    
+    <div id="msg_area">
+
+        <div v-for=" a_msg in run_msg.msg_list | limitBy 5">
+          {{a_msg}} <br><br>
+        </div>
+        <div class="err_area" v-show="err_msg.msg_count>0" >
+          数据出错。发现错误：{{err_msg.msg_count}} 个。
+          此处只列出最新的 5 个。 
+          <br><br><button @click="err_msg.download()" style="float:right;"> 下载全部出错清单 </button>
+          <br><br>
+          <div class="err_msg" v-for="a_msg in err_msg.msg_list | limitBy 5">
+            {{a_msg}} 
+          </div>
+        </div>
+        <div id="srcfile_area" >
+          下列文件是自动匹配的输入文件，请仔细检查是否正确：
+          <input type="file" id="file_src" style="display:none;" >
+          <table border="0">
+          <tr><td>工作目录 : </td>
+              <td width="20em"> </td>
+              <td>......{{base_dir.substring(base_dir.length-25)}}</td></tr>
+          <tr v-for=" a_file in src_files_flag">
+              <td> {{a_file}} : </td><td > </td><td> {{ src_files[a_file] }} </td>
+          </tr>
+          </table>
+        </div>
+    </div>
+
+    <div id="cmd_area">
+      <div v-for="a_step in step_array">
+        <span v-if="true || step>=a_step.idx">
+        {{a_step.desc}} 
+        <button :disabled="!(step==a_step.idx)" @click="do_proc(a_step)" > 运行 </button><br/><br/>
+        </span>
+      </div>
+    </div>
+
+  </div>
+  </div>
+
+  <div id="debug_area"  style="display:none1;"> 
+    <div>Debug Area</div><br/>
+    step:<input  type="number" v-model="step"  name="text_1" /> {{step}}
+    <br><br>
+    <button  @click="setStep(100)" > Init </button> 
+    <button  @click="setStep(180)" > 180 </button>
+    <button  onclick="test()" > test </button><br/>
+  </div>
+
+
+
+<script type="text/javascript">
+
+var MSG = Msg.createNew();
+var ERR_MSG = Msg.createNew();
+
+var vm = new Vue({
+  el: '#app',
+  data: {
+    run_flag: true,
+    step:100,
+    step_array:[],
+    run_msg: MSG,
+    err_msg: ERR_MSG,
+    base_dir: "",
+    src_files_flag: [],
+    src_files: []
+  },
+  methods: {
+    do_proc: function(a_step){
+      var index = a_step.idx;
+      var func = a_step.func;
+      var desc = a_step.desc;
+      console.log("Run step, index:" + index + " desc: " + desc);
+      MSG.put( "开始执行：" + desc + "");
+
+      vm.step = index+1;
+
+      if (func && (typeof func == "function")){
+        setTimeout(function() {
+          var flag = func();
+          console.log(index+1);
+
+          if( flag==true ){
+            vm.step = a_step.next_step_idx;
+          }else{
+            vm.step = vm.step_array[0].idx;
+          }
+        }, 200);
+      }
+    },
+    setStep: function(i_step){vm.step=i_step;}
+  }
+});
+
+var make_step = function( i_index, s_desc, f_func_name, next ){
+  var obj_step = {};
+  obj_step.idx = i_index;
+  obj_step.desc = s_desc;
+  obj_step.func = f_func_name;
+  obj_step.next_step_idx = next;
+  return obj_step;
+};
+
+vm.step_array.push( make_step( 100, "第零步：系统启动。", init_100, 110 ) );
+vm.step_array.push( make_step( 110, "第一步：检查环境。", check_env_110, 120 ) );
+vm.step_array.push( make_step( 120, "第二步：选择数据源文件。", select_file_120 , 130) );
+vm.step_array.push( make_step( 130, "第三步：检查数据源文件是否齐备。", check_src_130, 140 ) );
+vm.step_array.push( make_step( 140, "第四步：检查标题栏名称是否合格。", check_column_140, 150 ) );
+vm.step_array.push( make_step( 150, "第五步：检查数据是否正确。", check_data_150, 160 ) );
+vm.step_array.push( make_step( 160, "第六步：计算物料组分项汇总。", calc_160, 170 ) );
+// vm.step_array.push( make_step( 170, "第七步：计算订单毛利。", calc_gross_170, 180 ) );
+// vm.step_array.push( make_step( 180, "第八步：加总物料毛利。", calc_prod_180, 190 ) );
+// vm.step_array.push( make_step( 190, "第九步：加总物料组毛利。", calc_group_190, 200 ) );
+// vm.step_array.push( make_step( 200, "第十步：填充渠道信息。", fill_branch_200, 210 ) );
+// vm.step_array.push( make_step( 210, "第十一步：填充地市信息。", fill_city_210, 220 ) );
+// vm.step_array.push( make_step( 220, "第十二步：计算地市渠道毛利。", calc_branch_city_220, 230 ) );
+// vm.step_array.push( make_step( 230, "第十二步：格式化数字。", format_230, 240 ) );
+// vm.step_array.push( make_step( 240, "第十三步：完成。", finish_240, 240 ) );
+
+init_100();
+console.log(vm.step_array);
+
+
+var debug_flag = 0;
+document.onkeydown = function(event) { 
+  keynum = event.which;
+  // 这一段是用来显示隐藏debug区的。
+  if (keynum==192){
+    if( debug_flag === 0 ){
+      debug_flag++;
+    }else if(debug_flag == 1 ){
+      debug_flag++;
+      document.getElementById('debug_area').style.display="";//显示     
+    }
+    else if(debug_flag == 2 ){
+      debug_flag = 0;
+      document.getElementById('debug_area').style.display="none";//隐藏
+    }
+  }
+};
+
+</script>
+</body>
+</html>
+
+
+
+
